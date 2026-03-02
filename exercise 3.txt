@@ -1,0 +1,295 @@
+CREATE TABLE `university`.`course` (
+    `course_no` INT NOT NULL,
+    `course_name` VARCHAR(100) NOT NULL,
+    `credit_hours` INT NOT NULL,
+    `department` VARCHAR(100) NOT NULL,
+    PRIMARY KEY (`course_no`)
+);
+CREATE TABLE `university`.`section` (
+    `section_no` INT NOT NULL,
+    `course_no` INT NOT NULL,
+    `semester` VARCHAR(100) NOT NULL,
+	`year` INT NOT NULL,
+	`instructor` VARCHAR(100) NOT NULL,
+    PRIMARY KEY (`section_no`),
+	FOREIGN KEY (`course_no`) REFERENCES course(`course_no`)
+);
+DROP TABLE university.section;
+CREATE TABLE `university`.`gradereport` (
+    `student_no` INT NOT NULL,
+    `section_no` INT NOT NULL,
+    `grade` VARCHAR(10) NOT NULL,
+    FOREIGN KEY (`student_no`) REFERENCES stud(`student_no`),
+    FOREIGN KEY (`section_no`) REFERENCES section(`section_no`)
+    );
+CREATE TABLE `university`.`prerequisite`(
+`course_no` INT NOT NULL,
+`prereq_no` INT NOT NULL,
+FOREIGN KEY (`course_no`) REFERENCES course(`course_no`)
+);
+
+
+DELETE FROM university.course
+WHERE course_no = 17 AND course_name = 'smith';
+
+DELETE FROM university.course
+WHERE course_no = 8 AND course_name = 'brown';
+
+
+                             #student table
+
+INSERT INTO `university`.`stud`
+(`name`,
+`student_no`,
+`class`,
+`major`)
+VALUES
+(17,'smith',1,'cs');
+ INSERT INTO `university`.`stud`
+(`name`,
+`student_no`,
+`class`,
+`major`)
+VALUES
+(8,'brown',2,'cs');
+
+DELETE FROM university.stud
+WHERE student_no = 17 AND name = 'smith';
+
+DELETE FROM university.stud
+WHERE student_no = 8 AND name = 'brown';
+
+INSERT INTO `university`.`stud`
+(`name`,
+`student_no`,
+`class`,
+`major`)
+VALUES
+('smith',17,1,'cs');
+ INSERT INTO `university`.`stud`
+(`name`,
+`student_no`,
+`class`,
+`major`)
+VALUES
+('brown',8,2,'cs');
+
+                                                                #course table
+ 
+INSERT INTO `university`.`course`
+(`course_no`,
+`course_name`,
+`credit_hours`,
+`department`)
+VALUES
+(1310,'intro to computer choice',4,'cs');
+
+INSERT INTO `university`.`course`
+(`course_no`,
+`course_name`,
+`credit_hours`,
+`department`)
+VALUES
+(3320,'data structure',4,'cs');
+
+INSERT INTO `university`.`course`
+(`course_no`,
+`course_name`,
+`credit_hours`,
+`department`)
+VALUES
+(2410,'discrete mathematics',3,'MATH');
+
+INSERT INTO `university`.`course`
+(`course_no`,
+`course_name`,
+`credit_hours`,
+`department`)
+VALUES
+(3380,'database',3,'cs');
+
+                                                     #section
+
+INSERT INTO `university`.`section`
+(`section_no`,
+`course_no`,
+`semester`,
+`year`,
+`instructor`)
+VALUES
+(85,2410,'fall',7,'king');
+
+INSERT INTO `university`.`section`
+(`section_no`,
+`course_no`,
+`semester`,
+`year`,
+`instructor`)
+VALUES
+(92,1310,'fall',7,'anderson');
+
+INSERT INTO `university`.`section`
+(`section_no`,
+`course_no`,
+`semester`,
+`year`,
+`instructor`)
+VALUES
+(102,3320,'spring',8,'anderson');
+
+INSERT INTO `university`.`section`
+(`section_no`,
+`course_no`,
+`semester`,
+`year`,
+`instructor`)
+VALUES
+(112,2410,'fall',8,'chang');
+
+INSERT INTO `university`.`section`
+(`section_no`,
+`course_no`,
+`semester`,
+`year`,
+`instructor`)
+VALUES
+(119,1310,'fall',8,'anderson');
+
+INSERT INTO `university`.`section`
+(`section_no`,
+`course_no`,
+`semester`,
+`year`,
+`instructor`)
+VALUES
+(135,3380,'fall',8,'stone');
+
+                                                       #grade report
+
+INSERT INTO `university`.`gradereport`
+(`student_no`,
+`section_no`,
+`grade`)
+VALUES
+(17,112,'B');
+
+INSERT INTO `university`.`gradereport`
+(`student_no`,
+`section_no`,
+`grade`)
+VALUES
+(17,119,'C');
+
+INSERT INTO `university`.`gradereport`
+(`student_no`,
+`section_no`,
+`grade`)
+VALUES
+(8,85,'A');
+
+INSERT INTO `university`.`gradereport`
+(`student_no`,
+`section_no`,
+`grade`)
+VALUES
+(8,92,'A');
+
+INSERT INTO `university`.`gradereport`
+(`student_no`,
+`section_no`,
+`grade`)
+VALUES
+(8,102,'B');
+
+INSERT INTO `university`.`gradereport`
+(`student_no`,
+`section_no`,
+`grade`)
+VALUES
+(8,135,'A');
+
+                                                       #prequisite
+
+INSERT INTO `university`.`prerequisite`
+(`course_no`,
+`prereq_no`)
+VALUES
+(3380,3320)
+;
+
+INSERT INTO `university`.`prerequisite`
+(`course_no`,
+`prereq_no`)
+VALUES
+(3320,1310)
+;
+INSERT INTO `university`.`prerequisite`
+(`course_no`,
+`prereq_no`)
+VALUES
+(3380,2410)
+;
+ 
+SELECT * FROM university.course;
+
+SELECT c.course_name, g.grade
+FROM university.stud s
+JOIN university.gradereport g ON s.student_no = g.student_no
+JOIN university.section se ON g.section_no = se.section_no                                       #1
+JOIN university.course c ON se.course_no = c.course_no
+WHERE s.name = 'smith';
+
+SELECT s.name, g.grade
+FROM university.stud s
+JOIN university.gradereport g ON s.student_no = g.student_no
+JOIN university.section se ON g.section_no = se.section_no
+JOIN university.course c ON se.course_no = c.course_no
+WHERE c.course_name = 'database'                                                                      #2
+AND se.semester = 'fall'
+AND se.year = 8;
+
+SELECT p.prereq_no
+FROM university.prerequisite p
+JOIN university.course c ON p.course_no = c.course_no                                                    #3
+WHERE c.course_name = 'database';
+
+SELECT name
+FROM university.stud
+WHERE class = 4 AND major = 'cs';                                                                         #4
+
+SELECT DISTINCT c.course_name
+FROM university.course c
+JOIN university.section s ON c.course_no = s.course_no                                                                #5
+WHERE s.instructor = 'king'
+AND s.year IN (7,8);
+
+SELECT s.course_no, s.semester, s.year,
+COUNT(g.student_no) AS total_students                                                                        #6
+FROM university.section s
+LEFT JOIN university.gradereport g
+ON s.section_no = g.section_no
+WHERE s.instructor = 'king'
+GROUP BY s.section_no;
+
+SELECT s.name, c.course_name, c.course_no,
+c.credit_hours, se.semester, se.year, g.grade
+FROM university.stud s                                                                                              #7
+JOIN university.gradereport g ON s.student_no = g.student_no
+JOIN university.section se ON g.section_no = se.section_no
+JOIN university.course c ON se.course_no = c.course_no
+WHERE s.class = 4 AND s.major = 'cs'
+ORDER BY s.name;
+
+INSERT INTO university.stud VALUES
+('Johnson',25,1,'Math');                                                                                         #8
+
+UPDATE university.stud
+SET class = 2
+WHERE student_no = 17;
+
+INSERT INTO university.course VALUES
+(4390,'Knowledge Engineering',3,'cs');                                                                       #10
+
+DELETE FROM university.stud
+WHERE name = 'smith' AND student_no = 17;                            #not possible as foreign key                                          #11
+
