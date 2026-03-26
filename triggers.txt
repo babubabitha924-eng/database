@@ -1,0 +1,41 @@
+CREATE DATABASE SALE;
+USE SALE;
+CREATE TABLE Product1(pdtid INT NOT NULL,
+                       pname VARCHAR(50) NOT NULL,
+                       price INT,
+                       qtyinstock INT,
+                       PRIMARY KEY (pdtid)
+                       );
+CREATE TABLE Sale1(saleid INT NOT NULL,
+                    deliveryaddress VARCHAR(100),
+                    );
+CREATE TABLE Saleitem(saleid INT  NOT NULL,
+                       pdtid INT NOT NULL,
+                       qty INT,
+                       FOREIGN  KEY (pdtid) REFERENCES Product1(pdtid)
+                       );
+DELIMITER $$
+CREATE TRIGGER updateAvailableQuantity 
+AFTER INSERT ON Saleitem 
+FOR EACH ROW 
+BEGIN
+   UPDATE Product1
+   SET qtyinstock=qtyinstock-NEW.qty
+   WHERE pdtid=NEW.pdtid;
+END $$
+DELIMITER ;
+INSERT INTO Product1 VALUES(1,'book',50,40);
+INSERT INTO Sale1 VALUES(101,'TVM');
+INSERT INTO Saleitem VALUES(101,1,30);
+SELECT * FROM Product1;
+INSERT INTO Product1 VALUES(2,'chart',10,100);
+INSERT INTO Sale1 VALUES(102,'kollam');
+INSERT INTO Saleitem VALUES(102,2,50);
+SELECT * FROM Product1;
+
+   
+   
+
+                    
+                       
+                       
