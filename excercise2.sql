@@ -1,0 +1,82 @@
+SELECT `countries`.`country_id`,
+    `countries`.`country_name`,
+    `countries`.`region_id`                                                       #1
+FROM `company`.`countries`;  
+
+                                           
+SELECT 
+    `employees`.`email`,
+    `employees`.`phone_no`
+FROM `company`.`employees`;                                                         #2
+
+SELECT * FROM `employees` WHERE last_name='Fay';                                    #3
+
+SELECT `employees`.`hire_date` FROM `employees` WHERE last_name='Grant' OR last_name='Whalen';                             #4
+
+SELECT 
+    `employees`.`first_name`,
+    `employees`.`last_name`
+ 
+FROM `company`.`employees` JOIN `company`.`jobs` ON employees.job_id=jobs.job_id WHERE jobs.job_title='shipping clerk';    #5
+
+SELECT `employees`.`employee_id`,
+    `employees`.`first_name`,
+    `employees`.`last_name`
+
+FROM `company`.`employees` JOIN `company`.`departments` ON employees.department_id=departments.department_id WHERE departments.department_id='8';   #6
+
+
+SELECT `departments`.`department_id`,
+    `departments`.`department_name`,                                                                           #7
+    `departments`.`location_id`
+FROM `company`.`departments` ORDER BY department_id DESC;                                            
+
+
+SELECT 
+    `employees`.`first_name`,
+    `employees`.`last_name`
+FROM `company`.`employees` WHERE last_name LIKE 'K%';                                                          #8
+
+
+SELECT `employees`.`first_name`,`employees`.`last_name` FROM `company`.`employees` WHERE hire_date BETWEEN '1995-01-01' AND '1997-12-31';      #9
+
+SELECT 
+    `employees`.`first_name`,
+    `employees`.`last_name`
+FROM `company`.`employees` WHERE salary < 5000 ;                                                           #10
+
+
+SELECT LOWER(email) AS email_lowercase
+FROM employees;                                                                                            #11
+
+
+SELECT `employees`.`first_name`,`employees`.`last_name` FROM `company`.`employees` WHERE hire_date BETWEEN '1995-01-01' AND '1995-12-31';          #12
+
+
+INSERT INTO `company`.`employees`
+(`employee_id`,
+`first_name`,
+`last_name`,
+`email`,
+`phone_no`,
+`hire_date`,
+`job_id`,
+`salary`,
+`manager_id`,
+`department_id`)
+VALUES
+(401,'Paul','Newton','paulnewton@2gmail.com',7654324112,'1996-02-15',1,50000,2,11);                                         #13
+
+UPDATE employees
+SET department_id = 7   -- choose an existing department
+WHERE department_id = 5;
+
+
+DELETE FROM departments 
+WHERE department_id = 5;   -- (use the actual ID returned)                                                                   #14
+
+
+
+
+
+

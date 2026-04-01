@@ -60,7 +60,7 @@ conn = pymongo.MongoClient("mongodb://localhost:27017/")
 db = conn["college1"]
 col = db["studlist1"]
 
-'''for i in col.find({}, {"_id": 0}):
+for i in col.find({}, {"_id": 0}):
     total = i["mark1"] + i["mark2"] + i["mark3"]
     print("Name:", i["name"], "Total Marks:", total)
 
@@ -135,7 +135,7 @@ result = col.find({
 })
 
 for doc in result:
-    print(doc)              '''                                          #9
+    print(doc)                                                    #9
     
 result = col.find({
     "gender": "female",
